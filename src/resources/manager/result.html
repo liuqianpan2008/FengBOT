@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: {{ theme.backgroundColor }};
+            color: {{ theme.textColor }};
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .title {
+            color: {{ theme.titleColor }};
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 18px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: rgba(0,0,0,0.02);
+            border: 1px solid {{ theme.borderColor }};
+        }
+    </style>
+</head>
+<body>
+    <div class="title">{{ title }}</div>
+    <div class="message">{{ message }}</div>
+</body>
+</html> 

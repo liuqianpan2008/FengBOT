@@ -1,0 +1,28 @@
+# 机器人配置示例文件
+# 实际使用时复制为 bot.yaml
+
+# 机器人基本信息
+bot:
+  name: "测试机器人"
+  version: "1.0.0"
+
+# 权限配置
+permissions:
+  owner: "123456789"        # 机器人拥有者QQ
+  superAdmins:              # 超级管理员
+    - "123456789"
+    - "987654321"
+  admins:                   # 普通管理员
+    - "111222333"
+    - "444555666"
+  users:                    # 注册用户
+    - "777888999"
+
+# 插件配置
+plugins:
+  sign:
+    enabled: true
+  system:
+    enabled: true
+  test:
+    enabled: true 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: {{ theme.backgroundColor }};
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        }
+        .container {
+            border: 1px solid {{ theme.borderColor }};
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .title {
+            color: {{ theme.titleColor }};
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .message {
+            color: {{ theme.textColor }};
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin: 16px 0;
+            padding: 12px;
+            border: 1px solid {{ theme.borderColor }};
+            border-radius: 4px;
+        }
+        .section-title {
+            color: {{ theme.titleColor }};
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .info-item {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .label {
+            color: {{ theme.labelColor }};
+            width: 120px;
+            font-weight: bold;
+        }
+        .value {
+            color: {{ theme.valueColor }};
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">{{ title }}</div>
+        <div class="message">{{ message }}</div>
+        
+        <div class="section">
+            <div class="section-title">CPU信息</div>
+            <div class="info-item">
+                <span class="label">型号:</span>
+                <span class="value">{{ info.cpu.model }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">核心数:</span>
+                <span class="value">{{ info.cpu.cores }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">使用率:</span>
+                <span class="value">{{ info.cpu.usage }}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">内存信息</div>
+            <div class="info-item">
+                <span class="label">总内存:</span>
+                <span class="value">{{ info.memory.total }}</span>
+            </div>
+            <div class="info-item">
+                <span class="label">已使用:</span>
+                <span class="value">{{ info.memory.used }} ({{ info.memory.percent }})</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">运行时长</div>
+            <div class="info-item">
+                <span class="label">已运行:</span>
+                <span class="value">{{ info.uptime.days }}天{{ info.uptime.hours }}小时{{ info.uptime.minutes }}分钟</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

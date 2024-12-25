@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: {{ theme.backgroundColor }};
+            color: {{ theme.textColor }};
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .title {
+            color: {{ theme.titleColor }};
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid {{ theme.borderColor }};
+        }
+        .message {
+            margin-bottom: 20px;
+        }
+        .plugin-list {
+            display: grid;
+            gap: 15px;
+        }
+        .plugin-item {
+            padding: 15px;
+            border: 1px solid {{ theme.borderColor }};
+            border-radius: 8px;
+            background-color: rgba(0,0,0,0.02);
+        }
+        .plugin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .plugin-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .plugin-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .status-enabled {
+            background-color: {{ theme.statusColors.enabled }};
+            color: white;
+        }
+        .status-disabled {
+            background-color: {{ theme.statusColors.disabled }};
+            color: white;
+        }
+        .plugin-info {
+            font-size: 14px;
+            color: {{ theme.commandColor }};
+            margin: 10px 0;
+        }
+        .plugin-commands {
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .command-item {
+            padding: 2px 0;
+            color: {{ theme.commandColor }};
+        }
+    </style>
+</head>
+<body>
+    <div class="title">{{ title }}</div>
+    <div class="message">{{ message }}</div>
+    <div class="plugin-list">
+        {{each plugins}}
+        <div class="plugin-item">
+            <div class="plugin-header">
+                <div class="plugin-name">{{ $value.name }} ({{ $value.id }})</div>
+                <div class="plugin-status {{if $value.status === '已启用'}}status-enabled{{else}}status-disabled{{/if}}">
+                    {{ $value.status }}
+                </div>
+            </div>
+            <div class="plugin-info">
+                {{if $value.version}}版本: {{ $value.version }}{{/if}}
+                {{if $value.author}} • 作者: {{ $value.author }}{{/if}}
+            </div>
+            {{if $value.commands && $value.commands.length}}
+            <div class="plugin-commands">
+                <div style="margin-bottom: 5px;">命令列表:</div>
+                {{each $value.commands}}
+                <div class="command-item">
+                    <span style="color: {{ theme.commandColor }};">• {{ $value }}</span>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+</body>
+</html> 

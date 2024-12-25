@@ -1,0 +1,19 @@
+# 经济系统数据示例文件
+# 实际使用时复制为 economy.yaml
+
+coins:
+  "123456789": 1000  # QQ号: 金币数量
+  "987654321": 500
+
+transactions:
+  - userId: "123456789"
+    amount: 100
+    type: "sign"
+    timestamp: 1703433600000
+    description: "签到奖励"
+  
+  - userId: "987654321"
+    amount: -50
+    type: "makeup"
+    timestamp: 1703433600000
+    description: "补签扣除" 

@@ -1,0 +1,34 @@
+# 用户数据示例文件
+# 实际使用时复制为 users.yaml
+
+"123456789":  # QQ号
+  userId: "123456789"
+  nickname: "测试用户"
+  exp: 100
+  level: 1
+  title: "初心者"
+  lastSignTime: 1703433600000  # 上次签到时间戳
+  signCount: 10
+  continuousSignDays: 3
+  totalSignDays: 15
+  monthlySignDays: 5
+  lastMonthSignTime: 1703433600000
+  reminderEnabled: true
+  makeupCount: 1
+  lastMakeupTime: 1703433600000
+
+"987654321":
+  userId: "987654321" 
+  nickname: "示例用户"
+  exp: 500
+  level: 2
+  title: "进阶者"
+  lastSignTime: 1703433600000
+  signCount: 20
+  continuousSignDays: 5
+  totalSignDays: 25
+  monthlySignDays: 8
+  lastMonthSignTime: 1703433600000
+  reminderEnabled: false
+  makeupCount: 0
+  lastMakeupTime: null 

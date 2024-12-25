@@ -1,0 +1,29 @@
+# 签到系统配置示例文件
+# 实际使用时复制为 sign.yaml
+
+# 基础奖励
+baseCoins: 10  # 基础金币
+baseExp: 5     # 基础经验
+
+# 连续签到奖励
+continuousBonus:
+  coins: 5     # 额外金币
+  exp: 2       # 额外经验
+
+# 等级配置
+levels:
+  "1":
+    exp: 0
+    title: "初心者"
+  "2":
+    exp: 100
+    title: "进阶者"
+  "3":
+    exp: 300
+    title: "老手"
+  "4":
+    exp: 600
+    title: "专家"
+  "5":
+    exp: 1000
+    title: "大师" 

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .title {
+            font-size: 28px;
+            color: #1890ff;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .user-details {
+            flex: 1;
+        }
+        .nickname {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #333;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(45deg, #1890ff, #36cfc9);
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1890ff;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .progress-section {
+            margin-top: 24px;
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .progress-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .progress-percentage {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1890ff;
+        }
+        .progress-bar {
+            height: 24px;
+            background: #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #1890ff, #36cfc9);
+            border-radius: 12px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(255,255,255,0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255,255,255,0.2) 50%,
+                rgba(255,255,255,0.2) 75%,
+                transparent 75%
+            );
+            background-size: 30px 30px;
+            animation: move 2s linear infinite;
+        }
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 30px 30px;
+            }
+        }
+        .calendar {
+            margin-top: 24px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .calendar-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .calendar-info {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .calendar-stat {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .calendar-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1890ff;
+            margin-bottom: 4px;
+        }
+        .calendar-label {
+            font-size: 12px;
+            color: #666;
+        }
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .avatar {
+                margin-right: 0;
+                margin-bottom: 16px;
+            }
+            .calendar-info {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">签到统计</div>
+            <div class="subtitle">{{ stats.nickname }} 的签到数据</div>
+        </div>
+
+        <div class="user-info">
+            <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk={{ stats.userId }}&s=640" alt="avatar">
+            <div class="user-details">
+                <div class="nickname">{{ stats.nickname }}</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ stats.totalSignDays }}</div>
+                <div class="stat-label">总签到天数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ stats.continuousSignDays }}</div>
+                <div class="stat-label">连续签到</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ stats.monthlySignDays }}</div>
+                <div class="stat-label">本月签到</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ stats.signCount }}</div>
+                <div class="stat-label">签到次数</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">
+                <span>本月签到率</span>
+                <span class="progress-percentage">{{ stats.signRate }}%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ stats.signRate }}%"></div>
+            </div>
+        </div>
+
+        <div class="calendar">
+            <div class="calendar-title">本月签到日历</div>
+            <div class="calendar-info">
+                <div class="calendar-stat">
+                    <div class="calendar-value">{{ stats.monthlySignDays }}</div>
+                    <div class="calendar-label">已签到</div>
+                </div>
+                <div class="calendar-stat">
+                    <div class="calendar-value">{{ stats.remainingDays }}</div>
+                    <div class="calendar-label">剩余天数</div>
+                </div>
+                <div class="calendar-stat">
+                    <div class="calendar-value">{{ stats.daysInMonth }}</div>
+                    <div class="calendar-label">本月总天数</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

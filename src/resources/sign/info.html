@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .title {
+            font-size: 28px;
+            color: #1890ff;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-right: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .user-details {
+            flex: 1;
+        }
+        .nickname {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #333;
+        }
+        .title-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(45deg, #1890ff, #36cfc9);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1890ff;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        .progress-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .progress-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .progress-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #1890ff, #36cfc9);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+        }
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .avatar {
+                margin-right: 0;
+                margin-bottom: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">个人信息</div>
+            <div class="subtitle">{{ info.nickname }} 的个人资料</div>
+        </div>
+
+        <div class="user-info">
+            <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk={{ info.userId }}&s=640" alt="avatar">
+            <div class="user-details">
+                <div class="nickname">{{ info.nickname }}</div>
+                <div class="title-tag">{{ info.title }}</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ info.coins }}</div>
+                <div class="stat-label">金币</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ info.exp }}</div>
+                <div class="stat-label">经验值</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ info.totalSignDays }}</div>
+                <div class="stat-label">总签到天数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ info.continuousSignDays }}</div>
+                <div class="stat-label">连续签到</div>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">等级进度 - LV.{{ info.level }}</div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ info.expPercentage }}%"></div>
+            </div>
+            <div class="progress-text">
+                <span>当前：{{ info.exp }}</span>
+                <span>下一级：{{ info.nextLevelExp }}</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
