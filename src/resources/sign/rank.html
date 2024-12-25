@@ -109,25 +109,25 @@
             <div class="subtitle">{{message}}</div>
         </div>
         <div class="rank-list">
-            {{#each users}}
+            {{each users}}
             <div class="rank-item">
-                <div class="rank-number">{{add @index 1}}</div>
+                <div class="rank-number">{{$index + 1}}</div>
                 <div class="user-info">
-                    <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk={{userId}}&s=640" alt="avatar">
+                    <img class="avatar" src="http://q1.qlogo.cn/g?b=qq&nk={{$value.userId}}&s=640" alt="avatar">
                     <div class="user-details">
-                        <div class="nickname">{{nickname}}</div>
-                        <div class="title-tag">{{title}}</div>
+                        <div class="nickname">{{$value.nickname}}</div>
+                        <div class="title-tag">{{$value.title}}</div>
                     </div>
                 </div>
                 <div class="value">
-                    {{#if (eq ../rankType "coin")}}
-                        {{coins}}金币
-                    {{else if (eq ../rankType "exp")}}
-                        {{exp}}经验
-                    {{else if (eq ../rankType "sign")}}
-                        {{totalSignDays}}天
-                    {{else if (eq ../rankType "continuous")}}
-                        {{continuousSignDays}}天
+                    {{if rankType === "coin"}}
+                        {{$value.coins}}金币
+                    {{else if rankType === "exp"}}
+                        {{$value.exp}}经验
+                    {{else if rankType === "sign"}}
+                        {{$value.totalSignDays}}天
+                    {{else if rankType === "continuous"}}
+                        {{$value.continuousSignDays}}天
                     {{/if}}
                 </div>
             </div>

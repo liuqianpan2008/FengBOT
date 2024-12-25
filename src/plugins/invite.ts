@@ -2,6 +2,7 @@ import {  plugins } from "../lib/decorators";
 import { QQbot } from "../lib/plugins";
 import path from 'path';
 import botlogger from '../lib/logger';
+import { MessageContext } from "../lib/plugins";
 
 interface InviteResponse {
     inviter: string;
@@ -32,11 +33,11 @@ interface InviteResponse {
     id: "invite",
     name: "群邀请处理",
     version: "1.0.0",
-    author: "Your Name",
-    describe: "处理群邀请和入群事件",
+    describe: "处理群邀请",
+    author: "枫叶秋林",
     help: {
         enabled: true,
-        description: "自动处理群邀请并发送欢迎消息"
+        description: "群邀请相关功能",
     }
 })
 export class Invite {
@@ -45,6 +46,83 @@ export class Invite {
         inviter: string;
         time: Date;
     }>();
+
+    // 修改消息处理方法
+    async handleMessage(context: MessageContext): Promise<any> {
+        try {
+            // 检查消息是否为空
+            if (!context.message || !Array.isArray(context.message) || context.message.length === 0) {
+                return null;
+            }
+
+            // 检查是否是群邀请消息
+            if (context.message_type === 'private') {
+                // 遍历消息数组查找 json 类型消息
+                for (const msg of context.message) {
+                    if (msg?.type === 'json' && msg?.data?.data) {
+                        try {
+                            const data = JSON.parse(msg.data.data);
+                            if (data?.app === 'com.tencent.qun.invite') {
+                                // 处理群邀请逻辑
+                                const groupCode = this.extractGroupCode(data);
+                                if (groupCode) {
+                                    botlogger.info('收到群邀请:', {groupCode});
+                                    return await this.handleInvite(context, groupCode);
+                                }
+                            }
+                        } catch (parseError) {
+                            botlogger.error('解析JSON失败:', parseError);
+                            continue;
+                        }
+                    }
+                }
+            }
+            return null;
+        } catch (error) {
+            botlogger.error('处理群邀请失败:', error);
+            return null;
+        }
+    }
+
+    // 提取群号的辅助方法
+    private extractGroupCode(data: any): string | null {
+        try {
+            if (data.meta && data.meta.news && data.meta.news.jumpUrl) {
+                const match = data.meta.news.jumpUrl.match(/groupcode=(\d+)/);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            return null;
+        } catch (error) {
+            botlogger.error('提取群号失败:', error);
+            return null;
+        }
+    }
+
+    // 处理邀请的方法
+    private async handleInvite(context: MessageContext, groupCode: string): Promise<any> {
+        try {
+            // 检查是否是机器人拥有者
+        
+            
+            // 记录邀请信息
+            this.inviteMap.set(groupCode, {
+                inviter: String(context.user_id),
+                time: new Date()
+            });
+
+            // 返回处理结果
+            return {
+                reply: `收到来自${context.sender?.nickname || context.user_id}的群${groupCode}邀请`
+            };
+        } catch (error) {
+            botlogger.error('处理群邀请失败:', error);
+            return {
+                reply: "处理群邀请时发生错误"
+            };
+        }
+    }
 
     // 处理群邀请事件
     async handleGroupInvite(event: any): Promise<void> {

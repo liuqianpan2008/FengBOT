@@ -402,17 +402,23 @@ export class Sign {
     @runcod(["rank", "排行"], "查看排行榜")
     async rank(context: MessageContext, type: string = "exp"): Promise<any> {
         try {
-            let users: (UserData & { coins?: number })[];
-            let title: string;
+            // 初始化用户数据
+            if (!this.userData) {
+                this.loadUserData();
+            }
 
-            // 获取所有用户数据
-            const validUsers = Object.values(this.userData)
-                .filter(user => this.validateUserData(user));
+            // 获取所有用户数据,只过滤掉无效的key
+            const validUsers = Object.entries(this.userData)
+                .filter(([key]) => key && typeof key === 'string')
+                .map(([key, user]) => ({
+                    ...user,
+                    coins: economy.getCoins(key, "查询余额") 
+                }));
 
             if (validUsers.length === 0) {
                 return {
                     title: "暂无排行",
-                    message: "还没有任何人签到哦，快来成为第一名吧！",
+                    message: "目前还没有任何记录",
                     template: {
                         enabled: true,
                         path: path.resolve(__dirname, '..', 'resources', 'sign', 'error.html')
@@ -420,91 +426,45 @@ export class Sign {
                 };
             }
 
-            // 确保 type 是字符串并转换为小写
-            const rankType = String(type).toLowerCase();
+            let rankType = "exp";
+            let sortedUsers = [];
 
-            switch (rankType) {
+            // 根据类型排序
+            switch (type) {
                 case "coin":
                 case "金币":
-                    // 获取所有用户的金币数据并排序
-                    users = await Promise.all(
-                        validUsers.map(async user => ({
-                            ...user,
-                            coins: await economy.getCoins(user.userId, "查询排行")
-                        }))
-                    );
-                    users = users
-                        .filter(user => (user.coins || 0) > 0)
-                        .sort((a, b) => (b.coins || 0) - (a.coins || 0))
-                        .slice(0, 10);
-                    title = "金币排行榜";
+                    rankType = "coin";
+                    sortedUsers = validUsers.sort((a, b) => b.coins - a.coins);
                     break;
-
-                case "exp":
-                case "经验":
-                    users = validUsers
-                        .sort((a, b) => b.exp - a.exp)
-                        .slice(0, 10);
-                    title = "经验排行榜";
-                    break;
-
                 case "sign":
-                case "总签到":
-                    users = validUsers
-                        .sort((a, b) => b.totalSignDays - a.totalSignDays)
-                        .slice(0, 10);
-                    title = "总签到排行榜";
+                case "签到":
+                    rankType = "sign"; 
+                    sortedUsers = validUsers.sort((a, b) => b.totalSignDays - a.totalSignDays);
                     break;
-
                 case "continuous":
                 case "连续":
-                case "连续签到":
-                    users = validUsers
-                        .sort((a, b) => b.continuousSignDays - a.continuousSignDays)
-                        .slice(0, 10);
-                    title = "连续签到排行榜";
+                    rankType = "continuous";
+                    sortedUsers = validUsers.sort((a, b) => b.continuousSignDays - a.continuousSignDays);
                     break;
-
                 default:
-                    users = validUsers
-                        .sort((a, b) => b.exp - a.exp)
-                        .slice(0, 10);
-                    title = "经验排行榜";
+                    sortedUsers = validUsers.sort((a, b) => b.exp - a.exp);
+                    break;
             }
 
-            // 确保所有数据字段都有有效值
-            users = users.map(user => ({
-                ...user,
-                nickname: user.nickname || String(user.userId),
-                exp: user.exp || 0,
-                totalSignDays: user.totalSignDays || 0,
-                continuousSignDays: user.continuousSignDays || 0,
-                title: user.title || this.config.levels['1'].title,
-                coins: user.coins || 0
-            }));
-
-            // 如果没有数据，返回提示
-            if (users.length === 0) {
-                return {
-                    title: "暂无排行",
-                    message: "暂时还没有上榜的用户哦~",
-                    template: {
-                        enabled: true,
-                        path: path.resolve(__dirname, '..', 'resources', 'sign', 'error.html')
-                    }
-                };
-            }
+            // 只取前10名
+            const topUsers = sortedUsers.slice(0, 10);
 
             return {
-                title,
-                message: "TOP 10 玩家",
-                users,
-                rankType: type,
+                title: "排行榜",
+                message: `${type}排行榜`, 
+                users: topUsers,
+                rankType,
                 template: {
                     enabled: true,
                     path: path.resolve(__dirname, '..', 'resources', 'sign', 'rank.html')
                 }
             };
+
         } catch (error) {
             botlogger.error('获取排行榜失败:', error);
             return {
